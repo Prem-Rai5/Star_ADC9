@@ -1,4 +1,5 @@
 S.O.L.I.D stands for:
+
 S - Single-responsiblity principle
 O - Open-closed principle
 L - Liskov substitution principle
