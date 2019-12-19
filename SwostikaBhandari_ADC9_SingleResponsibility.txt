@@ -1,0 +1,31 @@
+S.O.L.I.D stands for:
+S - Single-responsiblity principle
+O - Open-closed principle
+L - Liskov substitution principle
+I - Interface segregation principle
+D - Dependency Inversion Principle
+
+Single-responsibility principle (S.R.P for short) - This principle states that a class should have one and only one reason to change, meaning that a class should have only one job.The Single Responsibility Principle is closely related to the concepts of coupling and cohesion.  Coupling refers to how inextricably linked different aspects of an application are, while cohesion refers to how closely related the contents of a particular class or package may be.  All of the contents of a single class are tightly coupled together, since the class itself is a single unit that must either be entirely used or not at all.  When other classes make use of a particular class, and that class changes, the depending classes must be tested to ensure they continue to function correctly with the new behavior of the class.  If a class has poor cohesion, some part of it may change that only certain depending classes utilize, while the rest of it may remain unchanged.  Nonetheless, classes that depend on the class must all be retested as a result of the change, increasing the total surface area of the application that is affected by the change.  If instead the class were broken up into several, highly cohesive classes, each would be used by fewer other elements of the system, and so a change to any one of them would have a lesser impact on the total system.
+
+
+
+In given example, we have two classes Person and Account. Both have single responsibility to store their specific information. If we want to change state of Person then we do not need to modify the class Account and vice-versa.
+
+Person.java
+public class Person 
+{
+    private Long personId;
+    private String firstName;
+    private String lastName;
+    private String age;
+    private List<Account> accounts;
+}
+Account.java
+public class Account 
+{
+    private Long guid;
+    private String accountNumber;
+    private String accountName;
+    private String status;
+    private String type;
+}
