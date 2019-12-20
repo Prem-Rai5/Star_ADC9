@@ -1,0 +1,97 @@
+                                                     OPEN CLOSED PRINCIPLE
+
+
+The Open Closed Principle (OCP) is the SOLID principle which states that
+the software entities (classes or methods) should be open for extension but closed
+for modification. Basically it means, we should try to write a code that doesnot
+require modification everytime a customer changes its request.
+Providing such a solution where we can extend the behaviour of 
+a class and not modify that class, should be our goal most of the
+time. We use OCP to lower the chance of producing bugs in project.
+OCP can help us create better and more maintainable code. 
+But, as with everything else, we should be cautious when 
+implementing this principle because sometime it is just impossible
+to extend our class and we are left to modify existing functionality.
+It id normal but at least we should to try to make those changes as
+discrete as they can be.So,developing application with the OCP we should
+try to write extendablecode as much as we can so it can lead us
+to maintainable,scalable and testable codebase.
+
+For Example We can take AreaCalculator Class, especially its sum method:
+public function sum() {
+    foreach($this->shapes as $shape) {
+        if(is_a($shape, 'Square')) {
+            $area[] = pow($shape->length, 2);
+        } else if(is_a($shape, 'Circle')) {
+            $area[] = pi() * pow($shape->radius, 2);
+        }
+    }
+
+    return array_sum($area);
+}
+
+The sum method to be able to sum the areas of more shapes,we would have to add more if/else blocks and 
+that goes against the Open-closed principle. To make this sum method better we have to remove logic to 
+calculate the area of each shape out of sum method and attach to the shape class.
+
+class Square {
+    public $length;
+
+    public function __construct($length) {
+        $this->length = $length;
+    }
+
+    public function area() {
+        return pow($this->length, 2);
+    }
+}
+
+Same thing should be done to Circle class, an area method should be added. Now, to calculate the 
+sum of any shape provided should be as simple.
+
+public function sum() {
+    foreach($this->shapes as $shape) {
+        $area[] = $shape->area();
+    }
+
+    return array_sum($area);
+}
+
+we can create another shape class and pass it in when calculating the sum without breaking our code.
+However, now another problem arises, how do we know that the object passed into the AreaCalculator is 
+actually a shape or if the shape has a method named area.
+
+However, now another problem arises, how do we know that the object passed into the AreaCalculator is
+actually a shape or if the shape has a method named area.
+
+interface ShapeInterface {
+    public function area();
+}
+
+class Circle implements ShapeInterface {
+    public $radius;
+
+    public function __construct($radius) {
+        $this->radius = $radius;
+    }
+
+    public function area() {
+        return pi() * pow($this->radius, 2);
+    }
+}
+
+AreaCalculator sum method we can check if the shapes provided are actually instances of the ShapeInterface,
+otherwise we throw an exception:
+
+public function sum() {
+    foreach($this->shapes as $shape) {
+        if(is_a($shape, 'ShapeInterface')) {
+            $area[] = $shape->area();
+            continue;
+        }
+
+        throw new AreaCalculatorInvalidShapeException;
+    }
+
+    return array_sum($area);
+}
